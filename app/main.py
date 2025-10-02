@@ -1,15 +1,15 @@
-from app.cafe import Cafe, Visitor
+from app.cafe import Cafe
 from app.errors \
-    import NotVaccinatedError, NotWearingMaskError, OutdatedVaccineError
+    import NotWearingMaskError, VaccineError
 
 
-def go_to_cafe(friends: list[Visitor], cafe: "Cafe") -> str:
+def go_to_cafe(friends: list, cafe: "Cafe") -> str:  # type: ignore
     masks_to_buy = 0
 
-    for fried in friends:
+    for fried in friends:  # type: ignore
         try:
-            cafe.visit_cafe(fried)
-        except (NotVaccinatedError, OutdatedVaccineError):
+            cafe.visit_cafe(fried)  # type: ignore
+        except (VaccineError):
             return "All friends should be vaccinated"
         except NotWearingMaskError:
             masks_to_buy += 1

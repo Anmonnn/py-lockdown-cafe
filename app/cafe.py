@@ -1,33 +1,24 @@
 import datetime
-from typing import TypedDict
 
-from app.errors import \
-    NotVaccinatedError, NotWearingMaskError, OutdatedVaccineError
-
-
-class VaccineInfo(TypedDict):
-    expiration_date: datetime.date
-
-
-class Visitor(TypedDict):
-    name: str
-    age: int
-    vaccine: VaccineInfo
-    wearing_a_mask: bool
+from app.errors import (
+    NotVaccinatedError,
+    OutdatedVaccineError,
+    NotWearingMaskError,
+)
 
 
 class Cafe:
     def __init__(self, name: str) -> None:
         self.name = name
 
-    def visit_cafe(self, visitor: Visitor) -> str:
+    def visit_cafe(self, visitor: dict) -> str:  # type: ignore
         if "vaccine" not in visitor:
             raise NotVaccinatedError()
 
         if visitor["vaccine"]["expiration_date"] < datetime.date.today():
             raise OutdatedVaccineError()
 
-        if not visitor["wearing_a_mask"]:
+        if not visitor.get("wearing_a_mask", False):  # type: ignore
             raise NotWearingMaskError()
 
         return f"Welcome to {self.name}"
